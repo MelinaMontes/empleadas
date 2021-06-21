@@ -12,6 +12,7 @@ public class Empleada {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     @Column(name = "empleada_id")
     private Integer empleadaId;
 
@@ -19,9 +20,12 @@ public class Empleada {
     private Integer edad;
 
     @ManyToOne //join columns van donde esta FK
+
     @JoinColumn(name = "categoria_id", referencedColumnName = "categoria_id")
     private Categoria categoria;
+
     private BigDecimal sueldo;
+
     private int estado;
 
     @Column(name= "fecha_alta")
