@@ -28,7 +28,17 @@ public class Categoria {
     @JsonIgnore
     private List<Empleada> empleadas = new ArrayList<>();
 
+    @JsonIgnore
+    @Transient // para que no impacte en hibernate/ddbb
+    private ISueldoCalculator sueldoCalculator;
 
+    public ISueldoCalculator getSueldoCalculator() {
+        return sueldoCalculator;
+    }
+
+    public void setSueldoCalculator(ISueldoCalculator sueldoCalculator) {
+        this.sueldoCalculator = sueldoCalculator;
+    }
 
     public List<Empleada> getEmpleadas() {
         return empleadas;
@@ -52,6 +62,19 @@ public class Categoria {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+        switch (this.nombre){
+            case "Administrativa":
+            this.sueldoCalculator = new SueldoAdministrativa();
+            break;
+
+            case "Ventas":
+            this.sueldoCalculator = new SueldoVentas();
+            break;
+
+            case "Auxiliar":
+            this.sueldoCalculator = new SueldoAuxiliar();
+            break;
+        }
     }
 
     public BigDecimal getSueldoBase() {
@@ -64,6 +87,10 @@ public class Categoria {
 
     public void agregarEmpleada (Empleada empleada){
         this.empleadas.add(empleada);
+    }
+
+    public BigDecimal calcularProximoSueldo(Empleada empleada) {
+        return sueldoCalculator.calcularSueldo(empleada);
     }
 
 }
